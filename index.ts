@@ -47,14 +47,18 @@ class DrawingUtil {
         const sf3 : number = ScaleUtil.divideScale(sf, 2, parts)
         const sf4 : number = ScaleUtil.divideScale(sf, 3, parts)
         const size : number = Math.min(w, h) / sizeFactor 
-        const clipSize : number = Math.min(w, h) / sizeFactor
+        const clipSize : number = Math.min(w, h) / clipSizeFactor
         context.save()
         context.translate(w / 2, h / 2)
-        DrawingUtil.drawLine(context, 0, 0, clipSize * sf1, clipSize * sf1)
+        if (sf1 > 0) {
+            DrawingUtil.drawLine(context, 0, 0, clipSize * sf1, clipSize * sf1)
+        }
         for (var j = 0; j < 2; j++) {
             context.save()
             context.rotate(j * sf3 * Math.PI / 2)
-            DrawingUtil.drawLine(context, 0, 0, -size * sf2, 0)
+            if (sf2 > 0) {
+                DrawingUtil.drawLine(context, 0, 0, -size * sf2, 0)
+            }
             context.restore()
         }
         context.fillRect(-size, -size * sf4, size, size * sf4)
@@ -65,7 +69,8 @@ class DrawingUtil {
         context.lineCap = 'round'
         context.lineWidth = Math.min(w, h) / strokeFactor 
         context.strokeStyle = colors[i]
-        DrawingUtil.drawMCLSNode(context, i, scale)
+        context.fillStyle = colors[i]
+        DrawingUtil.drawMidClipSquare(context, scale)
     }
 }
 
