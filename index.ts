@@ -208,3 +208,25 @@ class MidClipLineSquare {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    mcls : MidClipLineSquare = new MidClipLineSquare()
+    animator : Animator = new Animator()
+    
+    render(context : CanvasRenderingContext2D) {
+        this.mcls.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.mcls.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.mcls.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
