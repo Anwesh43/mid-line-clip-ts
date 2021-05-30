@@ -30,3 +30,41 @@ class ScaleUtil {
         return Math.sin(scale * Math.PI)
     }
 }
+
+class DrawingUtil {
+    
+    static drawLine(context : CanvasRenderingContext2D, x1 : number, y1 : number, x2 : number, y2 : number) {
+        context.beginPath()
+        context.moveTo(x1, y1)
+        context.lineTo(x2, y2)
+        context.stroke()
+    }
+
+    static drawMidClipSquare(context : CanvasRenderingContext2D, scale : number) {
+        const sf : number = ScaleUtil.sinify(scale)
+        const sf1 : number = ScaleUtil.divideScale(sf, 0, parts)
+        const sf2 : number = ScaleUtil.divideScale(sf, 1, parts)
+        const sf3 : number = ScaleUtil.divideScale(sf, 2, parts)
+        const sf4 : number = ScaleUtil.divideScale(sf, 3, parts)
+        const size : number = Math.min(w, h) / sizeFactor 
+        const clipSize : number = Math.min(w, h) / sizeFactor
+        context.save()
+        context.translate(w / 2, h / 2)
+        DrawingUtil.drawLine(context, 0, 0, clipSize * sf1, clipSize * sf1)
+        for (var j = 0; j < 2; j++) {
+            context.save()
+            context.rotate(j * sf3 * Math.PI / 2)
+            DrawingUtil.drawLine(context, 0, 0, -size * sf2, 0)
+            context.restore()
+        }
+        context.fillRect(-size, -size * sf4, size, size * sf4)
+        context.restore()
+    }
+
+    static drawMCLSNode(context : CanvasRenderingContext2D, i : number, scale : number) {
+        context.lineCap = 'round'
+        context.lineWidth = Math.min(w, h) / strokeFactor 
+        context.strokeStyle = colors[i]
+        DrawingUtil.drawMCLSNode(context, i, scale)
+    }
+}
